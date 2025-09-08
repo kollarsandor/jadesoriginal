@@ -1,0 +1,63 @@
+{:deps {org.clojure/clojure {:mvn/version "1.12.0"}
+        
+        ;; Web framework
+        http-kit/http-kit {:mvn/version "2.8.0"}
+        ring/ring-core {:mvn/version "1.13.0"}
+        ring/ring-json {:mvn/version "0.5.1"}
+        compojure/compojure {:mvn/version "1.7.1"}
+        ring/ring-defaults {:mvn/version "0.5.0"}
+        
+        ;; JSON handling
+        org.clojure/data.json {:mvn/version "2.5.1"}
+        cheshire/cheshire {:mvn/version "5.13.0"}
+        
+        ;; BigQuery integration
+        com.google.cloud/google-cloud-bigquery {:mvn/version "2.42.3"}
+        com.google.auth/google-auth-library-oauth2-http {:mvn/version "1.27.1"}
+        
+        ;; Data processing
+        org.clojure/data.csv {:mvn/version "1.1.0"}
+        semantic-csv/semantic-csv {:mvn/version "0.2.1-alpha1"}
+        
+        ;; Bioinformatics libraries
+        clj-biosequence/clj-biosequence {:mvn/version "0.5.3"}
+        
+        ;; Machine learning
+        tech.ml.dataset/tech.ml.dataset {:mvn/version "7.032"}
+        scicloj/tablecloth {:mvn/version "7.032"}
+        
+        ;; Async processing
+        org.clojure/core.async {:mvn/version "1.6.681"}
+        
+        ;; Math and statistics
+        org.clojure/math.numeric-tower {:mvn/version "0.1.0"}
+        incanter/incanter-core {:mvn/version "1.9.3"}
+        incanter/incanter-stats {:mvn/version "1.9.3"}
+        
+        ;; Caching
+        org.clojure/core.cache {:mvn/version "1.1.234"}
+        org.clojure/core.memoize {:mvn/version "1.1.266"}
+        
+        ;; Logging
+        ch.qos.logback/logback-classic {:mvn/version "1.5.12"}
+        org.clojure/tools.logging {:mvn/version "1.3.0"}
+        
+        ;; Environment configuration
+        environ/environ {:mvn/version "1.2.0"}
+        
+        ;; Date/time handling
+        clojure.java-time/clojure.java-time {:mvn/version "1.4.3"}
+        
+        ;; Parallel processing
+        com.taoensso/tufte {:mvn/version "2.6.3"}
+        prismatic/plumbing {:mvn/version "0.6.0"}}
+        
+ :aliases {:run {:main-opts ["-m" "alphagenome.core"]}
+           :dev {:extra-deps {org.clojure/tools.namespace {:mvn/version "1.5.0"}
+                              nrepl/nrepl {:mvn/version "1.3.0"}
+                              cider/cider-nrepl {:mvn/version "0.50.2"}}
+                 :jvm-opts ["-Dclojure.server.repl={:port,5555,:accept,clojure.core.server/repl}"]}
+           :test {:extra-deps {lambdaisland/kaocha {:mvn/version "1.91.1392"}}}
+           :uberjar {:extra-deps {com.github.seancorfield/depstar {:mvn/version "2.1.303"}}
+                     :main-opts ["-m" "hf.depstar.uberjar" "alphagenome.jar"
+                                 "-C" "-m" "alphagenome.core"]}}}

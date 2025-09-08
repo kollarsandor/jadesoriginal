@@ -1,0 +1,32 @@
+name:                protocol-service
+version:             1.0.0
+github:              "jaded/protocol-service"
+license:             MIT
+author:              "JADED Platform"
+maintainer:          "contact@jaded-platform.com"
+copyright:           "2025 JADED Platform"
+
+extra-source-files:
+- README.md
+
+description:         Production protocol analysis service in Haskell
+
+dependencies:
+- base >= 4.7 && < 5
+- scotty
+- aeson
+- text
+- time
+- containers
+- http-types
+- mtl
+
+executables:
+  protocol-service:
+    main:                Main.hs
+    source-dirs:         app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    - -O2

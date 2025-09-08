@@ -1,0 +1,10 @@
+.{
+    .name = "system-utils",
+    .version = "1.0.0",
+    .dependencies = .{
+        .httpz = .{
+            .url = "https://github.com/karlseguin/http.zig/archive/v0.9.3.tar.gz",
+            .hash = "1220f71bfd583a7ee59321d5e50b5ec2e6b28b9d5e6a2e8e9b5b0b5e5e5e5e5e",
+        },
+    },
+}

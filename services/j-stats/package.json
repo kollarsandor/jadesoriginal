@@ -1,0 +1,25 @@
+{
+  "name": "jaded-j-stats",
+  "version": "1.0.0",
+  "description": "JADED J Statistics Engine - Advanced Array Programming for Scientific Data Analysis",
+  "main": "src/stats_service.js",
+  "scripts": {
+    "start": "node src/stats_service.js",
+    "test": "echo \"No tests specified\" && exit 0"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "child_process": "^1.0.2"
+  },
+  "keywords": [
+    "j-language",
+    "statistics",
+    "array-programming",
+    "bioinformatics",
+    "data-analysis"
+  ],
+  "author": "JADED Platform",
+  "license": "MIT"
+}

@@ -1,0 +1,11 @@
+packages: .
+
+package protocol-service
+    documentation: True
+    
+constraints: 
+    any.aeson >= 2.0,
+    any.wai >= 3.2,
+    any.warp >= 3.3
+    
+allow-newer: *
