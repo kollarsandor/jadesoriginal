@@ -1,0 +1,18 @@
+{
+  "name": "jaded-platform",
+  "version": "1.0.0",
+  "description": "JADED Deep Discovery AI Platform",
+  "main": "index.html",
+  "scripts": {
+    "start": "python coordinator.py",
+    "dev": "python coordinator.py --debug",
+    "install": "pip install -r requirements.txt"
+  },
+  "keywords": ["AI", "scientific", "research", "bioinformatics", "alphafold"],
+  "author": "Sándor Kollár",
+  "license": "MIT",
+  "dependencies": {
+    "highlight.js": "^11.9.0",
+    "marked": "^9.1.6"
+  }
+}

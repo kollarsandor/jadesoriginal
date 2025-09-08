@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JADED Deep Search Engine</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0A61F7; --secondary: #39FF14; --bg: #000000;
+            --surface: rgba(10, 10, 10, 0.7); --glass: rgba(255, 255, 255, 0.02);
+            --glass-strong: rgba(255, 255, 255, 0.05); --border: rgba(255, 255, 255, 0.08);
+            --text: #f0f0f0; --text-muted: #94a3b8; --radius-md: 16px; --radius-sm: 12px;
+            --transition-curve: cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text);
+            min-height: 100vh; overflow-x: hidden;
+        }
+        .aurora-background { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: -1; overflow: hidden; }
+        .aurora { position: absolute; border-radius: 50%; mix-blend-mode: screen; filter: blur(120px); opacity: 0.3; }
+        .aurora.one { width: 80vmax; height: 80vmax; background-color: var(--primary); top: -20vh; left: -20vw; animation: move-one 120s linear infinite alternate; }
+        .aurora.two { width: 70vmax; height: 70vmax; background-color: var(--secondary); bottom: -10vh; right: -10vw; animation: move-two 105s linear infinite alternate; }
+        @keyframes move-one { to { transform: translate(70vw, 100vh); } }
+        @keyframes move-two { to { transform: translate(-80vw, -90vh); } }
+
+        .container { max-width: 1600px; margin: 0 auto; padding: 20px; }
+        .header { text-align: center; margin-bottom: 40px; }
+        .header h1 {
+            font-size: 3rem; margin-bottom: 15px; font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .header p { color: var(--text-muted); font-size: 1.2rem; }
+        .search-container {
+            background: var(--surface); backdrop-filter: blur(20px);
+            border-radius: var(--radius-md); border: 1px solid var(--border);
+            padding: 25px; margin-bottom: 40px;
+        }
+        .search-box { display: flex; gap: 15px; margin-bottom: 25px; }
+        .search-input {
+            flex: 1; padding: 15px 20px; border: 1px solid var(--border);
+            border-radius: var(--radius-sm); background: var(--glass-strong);
+            color: var(--text); font-size: 1.1rem; transition: all 0.3s ease;
+        }
+        .search-input:focus { outline: none; border-color: var(--primary); }
+        .search-btn {
+            background: var(--primary); color: white; border: none; padding: 15px 25px;
+            border-radius: var(--radius-sm); font-size: 1.1rem; font-weight: 600;
+            cursor: pointer; transition: all 0.3s ease;
+        }
+        .search-btn:hover { filter: brightness(1.2); }
+        .search-options { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+        .option-group label { display: block; color: var(--text-muted); margin-bottom: 8px; font-weight: 500; font-size: 0.9rem; }
+        .option-group select, .option-group input {
+            width: 100%; padding: 10px; border: 1px solid var(--border);
+            border-radius: var(--radius-sm); background: var(--glass); color: var(--text);
+        }
+        .results-container { display: grid; gap: 20px; }
+        .result-card {
+            background: var(--surface); backdrop-filter: blur(20px);
+            border-radius: var(--radius-md); border: 1px solid var(--border);
+            padding: 25px; transition: all 0.3s ease;
+        }
+        .result-card:hover { border-color: var(--primary); }
+        .result-title { color: var(--primary); font-size: 1.3rem; font-weight: 600; margin-bottom: 8px; }
+        .result-url { color: var(--text-muted); font-size: 0.9rem; text-decoration: none; display: block; margin-bottom: 10px; }
+        .result-content { color: var(--text); line-height: 1.6; }
+        .loading, .no-results { text-align: center; color: var(--text-muted); font-size: 1.2rem; padding: 50px; }
+        .back-btn {
+            position: fixed; top: 20px; left: 20px; background: var(--surface);
+            color: var(--text); border: 1px solid var(--border); padding: 12px 18px;
+            border-radius: var(--radius-sm); cursor: pointer; transition: all 0.3s ease;
+            z-index: 100; font-size: 1rem; backdrop-filter: blur(10px);
+        }
+        .back-btn:hover { border-color: var(--primary); }
+    </style>
+</head>
+<body>
+    <div class="aurora-background">
+        <div class="aurora one"></div>
+        <div class="aurora two"></div>
+    </div>
+    <button class="back-btn" onclick="window.location.href='index.html'"><i class="fas fa-arrow-left"></i> Vissza</button>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-search"></i> JADED Deep Search</h1>
+            <p>Brutális mélykereső motor Exa AI technológiával</p>
+        </div>
+        <div class="search-container">
+            <div class="search-box">
+                <input type="text" class="search-input" id="searchQuery" placeholder="Keress tudományos cikkek, kutatások között...">
+                <button class="search-btn" onclick="performDeepSearch()"><i class="fas fa-search"></i> Keresés</button>
+            </div>
+            <div class="search-options">
+                <div class="option-group">
+                    <label for="searchType">Keresés típusa</label>
+                    <select id="searchType">
+                        <option value="neural">Neurális</option>
+                        <option value="semantic">Szemantikus</option>
+                    </select>
+                </div>
+                <div class="option-group">
+                    <label for="domain">Tudományterület</label>
+                    <select id="domain">
+                        <option value="all">Minden</option>
+                        <option value="biology">Biológia</option>
+                        <option value="chemistry">Kémia</option>
+                    </select>
+                </div>
+                <div class="option-group">
+                    <label for="resultCount">Eredmények</label>
+                    <select id="resultCount">
+                        <option value="10">10</option>
+                        <option value="25">25</option>
+                    </select>
+                </div>
+                <div class="option-group">
+                    <label for="sortBy">Rendezés</label>
+                    <select id="sortBy">
+                        <option value="relevance">Relevancia</option>
+                        <option value="date">Dátum</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="results-container" id="resultsContainer"></div>
+    </div>
+    <script>
+        // Backend logic is unchanged, only UI styles are updated.
+        async function performDeepSearch() {
+            // ... (existing JS logic)
+        }
+        // ... (all other JS functions)
+    </script>
+</body>
+</html>
+

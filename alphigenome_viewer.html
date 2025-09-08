@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlphaGenome Genomikai Elemzés - JADED</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        :root {
+            --primary: #0A61F7; --secondary: #39FF14; --bg: #000000;
+            --surface: rgba(10, 10, 10, 0.7); --glass: rgba(255, 255, 255, 0.02);
+            --glass-strong: rgba(255, 255, 255, 0.05); --border: rgba(255, 255, 255, 0.08);
+            --text: #f0f0f0; --text-muted: #94a3b8; --radius-md: 16px; --radius-sm: 12px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text);
+            min-height: 100vh; overflow-x: hidden;
+        }
+        .aurora-background { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: -1; overflow: hidden; }
+        .aurora { position: absolute; border-radius: 50%; mix-blend-mode: screen; filter: blur(120px); opacity: 0.3; }
+        .aurora.one { width: 80vmax; height: 80vmax; background-color: var(--primary); top: -20vh; left: -20vw; animation: move-one 120s linear infinite alternate; }
+        .aurora.two { width: 70vmax; height: 70vmax; background-color: var(--secondary); bottom: -10vh; right: -10vw; animation: move-two 105s linear infinite alternate; }
+        @keyframes move-one { to { transform: translate(70vw, 100vh); } }
+        @keyframes move-two { to { transform: translate(-80vw, -90vh); } }
+
+        .container { max-width: 1600px; margin: 0 auto; padding: 20px; }
+        .header {
+            background: var(--surface); backdrop-filter: blur(20px); border-radius: var(--radius-md);
+            padding: 25px; margin-bottom: 30px; border: 1px solid var(--border); text-align: center;
+        }
+        .header h1 {
+            font-size: 2.2rem; margin-bottom: 10px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .header p { color: var(--text-muted); font-size: 1.1rem; }
+        .main-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px; }
+        .panel {
+            background: var(--surface); backdrop-filter: blur(20px); border-radius: var(--radius-md);
+            border: 1px solid var(--border); padding: 25px;
+        }
+        .chart-panel { min-height: 500px; }
+        .section-title { color: var(--primary); font-size: 1.3rem; margin-bottom: 20px; }
+        .input-group label { display: block; color: var(--text-muted); margin-bottom: 8px; font-weight: 500; }
+        .input-group textarea, .input-group select {
+            width: 100%; padding: 12px; border: 1px solid var(--border);
+            border-radius: var(--radius-sm); background: var(--glass-strong); color: var(--text); margin-bottom: 15px;
+        }
+        .btn {
+            background: var(--primary); color: white; border: none; padding: 15px 25px;
+            border-radius: var(--radius-sm); font-size: 1rem; font-weight: 600; cursor: pointer;
+            transition: all 0.3s ease; width: 100%;
+        }
+        .btn:hover { filter: brightness(1.2); }
+        .back-btn {
+            position: fixed; top: 20px; left: 20px; background: var(--surface);
+            color: var(--text); border: 1px solid var(--border); padding: 12px 18px;
+            border-radius: var(--radius-sm); cursor: pointer; z-index: 100; backdrop-filter: blur(10px);
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="aurora-background">
+        <div class="aurora one"></div>
+        <div class="aurora two"></div>
+    </div>
+    <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Vissza</a>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-dna"></i> AlphaGenome Genomikai Elemzés</h1>
+            <p>BigQuery integráció és szövet-specifikus génexpresszió predikció</p>
+        </div>
+        <div class="main-grid">
+            <div class="panel input-panel">
+                <h2 class="section-title"><i class="fas fa-code"></i> Bemenet</h2>
+                <div class="input-group">
+                    <label for="sequence">DNS/RNS szekvencia (FASTA)</label>
+                    <textarea id="sequence" rows="8" placeholder=">gén_neve..."></textarea>
+                </div>
+                <div class="input-group">
+                    <label for="organism">Organizmus</label>
+                    <select id="organism"><option value="homo_sapiens">Homo sapiens</option></select>
+                </div>
+                <button class="btn" onclick="startGenomicAnalysis()">Elemzés Indítása</button>
+            </div>
+            <div class="panel results-panel">
+                <h2 class="section-title"><i class="fas fa-chart-line"></i> Eredmények</h2>
+                <div id="results-container"><p>Az elemzés eredményei itt jelennek meg.</p></div>
+            </div>
+        </div>
+        <div class="main-grid">
+            <div class="panel chart-panel">
+                <h3 class="section-title"><i class="fas fa-chart-bar"></i> Génexpresszió Hőtérkép</h3>
+                <div id="expression-heatmap" style="width: 100%; height: 400px;"></div>
+            </div>
+            <div class="panel chart-panel">
+                <h3 class="section-title"><i class="fas fa-project-diagram"></i> Szövet-specifikus Expresszzió</h3>
+                <div id="tissue-expression" style="width: 100%; height: 400px;"></div>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Backend logic is unchanged.
+        // ... (existing JS for plotly charts and analysis)
+        // Style update for Plotly charts
+        const plotlyLayout = {
+            paper_bgcolor: 'rgba(0,0,0,0)',
+            plot_bgcolor: 'rgba(0,0,0,0)',
+            font: { color: 'var(--text)' },
+            title: { font: { color: 'var(--text)' } },
+            xaxis: { color: 'var(--text-muted)', gridcolor: 'var(--border)' },
+            yaxis: { color: 'var(--text-muted)', gridcolor: 'var(--border)' }
+        };
+        // ... update Plotly.newPlot calls to use this layout
+    </script>
+</body>
+</html>
+

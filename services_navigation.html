@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JADED Szolgáltatások - Navigáció</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0A61F7; 
+            --secondary: #39FF14; 
+            --bg: #000000; 
+            --surface: rgba(10, 10, 10, 0.7); 
+            --glass: rgba(255, 255, 255, 0.02);
+            --glass-strong: rgba(255, 255, 255, 0.05); 
+            --border: rgba(255, 255, 255, 0.08);
+            --text: #f0f0f0; 
+            --text-muted: #94a3b8; 
+            --radius-lg: 24px; 
+            --radius-md: 16px; 
+            --radius-sm: 12px;
+            --transition-curve: cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+            padding: 20px;
+        }
+        .aurora-background { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: -1; overflow: hidden; }
+        .aurora { position: absolute; border-radius: 50%; mix-blend-mode: screen; filter: blur(120px); opacity: 0.3; }
+        .aurora.one { width: 80vmax; height: 80vmax; background-color: var(--primary); top: -20vh; left: -20vw; animation: move-one 120s linear infinite alternate; }
+        .aurora.two { width: 70vmax; height: 70vmax; background-color: var(--secondary); bottom: -10vh; right: -10vw; animation: move-two 105s linear infinite alternate; }
+        @keyframes move-one { to { transform: translate(70vw, 100vh); } }
+        @keyframes move-two { to { transform: translate(-80vw, -90vh); } }
+
+        .container { max-width: 1400px; margin: 0 auto; }
+        .header { text-align: center; margin-bottom: 40px; }
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .header p { color: var(--text-muted); font-size: 1.2rem; }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+        .service-card {
+            background: var(--surface);
+            backdrop-filter: blur(20px);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border);
+            padding: 30px;
+            transition: all 0.3s var(--transition-curve);
+            cursor: pointer;
+            text-decoration: none;
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+        }
+        .service-card:hover { transform: translateY(-10px); box-shadow: 0 20px 60px rgba(0,0,0,0.5); border-color: var(--primary); }
+        .service-icon { font-size: 3rem; margin-bottom: 20px; text-align: center; color: var(--primary); }
+        .service-title { font-size: 1.5rem; font-weight: 600; margin-bottom: 15px; text-align: center; }
+        .service-description { color: var(--text-muted); line-height: 1.6; margin-bottom: 20px; text-align: center; flex-grow: 1; }
+        .launch-btn {
+            background: var(--glass-strong);
+            color: var(--text);
+            border: 1px solid var(--border);
+            padding: 12px 25px;
+            border-radius: var(--radius-sm);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s var(--transition-curve);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: auto;
+        }
+        .launch-btn:hover { background: var(--primary); border-color: var(--primary); color: white; }
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: var(--surface);
+            color: var(--text);
+            border: 1px solid var(--border);
+            padding: 12px 18px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all 0.3s var(--transition-curve);
+            z-index: 100;
+            font-size: 1rem;
+            backdrop-filter: blur(10px);
+        }
+        .back-btn:hover { border-color: var(--primary); }
+        .category-section { margin-bottom: 50px; }
+        .category-title { color: var(--text); font-size: 2rem; margin-bottom: 25px; text-align: center; font-weight: 600; }
+        @media (max-width: 768px) {
+            body { padding: 10px; }
+            .header h1 { font-size: 2rem; }
+            .services-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="aurora-background">
+        <div class="aurora one"></div>
+        <div class="aurora two"></div>
+    </div>
+
+    <button class="back-btn" onclick="window.location.href='index.html'">
+        <i class="fas fa-arrow-left"></i> Vissza
+    </button>
+
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-rocket"></i> JADED Tudományos Szolgáltatások</h1>
+            <p>Dedikált aloldalak a fő tudományos platformokhoz</p>
+        </div>
+
+        <div class="category-section">
+            <h2 class="category-title">Fő Platformok</h2>
+            <div class="services-grid">
+                <a href="alphafold_viewer.html" class="service-card">
+                    <div class="service-icon"><i class="fas fa-dna"></i></div>
+                    <div class="service-title">AlphaFold 3 Viewer</div>
+                    <div class="service-description">Professzionális 3D protein szerkezet predikció és interaktív vizualizáció.</div>
+                    <div class="launch-btn"><i class="fas fa-play"></i> Indítás</div>
+                </a>
+                <a href="alphigenome_viewer.html" class="service-card">
+                    <div class="service-icon"><i class="fas fa-chart-line"></i></div>
+                    <div class="service-title">AlphaGenome Viewer</div>
+                    <div class="service-description">Genomikai elemzés BigQuery integrációval és szövet-specifikus predikcióval.</div>
+                    <div class="launch-btn"><i class="fas fa-chart-bar"></i> Indítás</div>
+                </a>
+                <a href="deep_search.html" class="service-card">
+                    <div class="service-icon"><i class="fas fa-search"></i></div>
+                    <div class="service-title">Deep Search Engine</div>
+                    <div class="service-description">Brutális mélykereső motor Exa AI technológiával és teljes tech stack-kel.</div>
+                    <div class="launch-btn"><i class="fas fa-rocket"></i> Indítás</div>
+                </a>
+                 <a href="3d_viewer.html" class="service-card">
+                    <div class="service-icon"><i class="fas fa-cube"></i></div>
+                    <div class="service-title">3D Viewer</div>
+                    <div class="service-description">Általános célú 3D megjelenítő és modell elemző eszköz.</div>
+                    <div class="launch-btn"><i class="fas fa-eye"></i> Indítás</div>
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
